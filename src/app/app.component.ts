@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   
-  option: string;
+  option: string = 'basic-creation';
 }
