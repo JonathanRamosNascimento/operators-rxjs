@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { from, interval, fromEvent } from 'rxjs';
-import { map, delay, filter, tap } from 'rxjs/operators';
+import { from, interval, fromEvent, Observable, Subscription } from 'rxjs';
+import { map, delay, filter, tap, take, first, last } from 'rxjs/operators';
 
 @Component({
   selector: 'app-operators',
@@ -42,13 +42,44 @@ export class OperatorsComponent implements OnInit {
   tapClick() {
     interval(1000)
       .pipe(
-        tap(i=> console.log('')),
-        tap(i=> console.warn('Before filtering: ', i)),
+        tap(i => console.log('')),
+        tap(i => console.warn('Before filtering: ', i)),
         filter(i => i % 2 == 0),
-        tap(i=> console.warn('After filtering: ', i)),
+        tap(i => console.warn('After filtering: ', i)),
         map(i => "Value: " + i),
-        tap(i=> console.warn('After map: ', i)),
+        tap(i => console.warn('After map: ', i)),
         delay(1000)
       ).subscribe(i => console.log(i));
+  }
+
+  takeClick() {
+    const observable = new Observable((observer) => {
+      let i;
+      for (i = 0; i < 20; i++) {
+        setTimeout(() => observer.next(Math.floor(Math.random() * 1000)), i * 100);
+      }
+      setTimeout(() => observer.complete(), i * 100);
+    });
+
+    const s: Subscription = observable
+    .pipe(
+      tap(i=>console.log(i)),
+      take(10)
+      // first()
+      // last()
+      )
+      .subscribe(
+        v=> console.log('Output: ',v),
+        (error) => console.error(error),
+        () => console.log('Complete!')
+        );
+
+    const interv = setInterval(() => {
+      console.log('Checking...');
+      if(s.closed) {
+        console.warn('Subscription CLOSED');
+        clearInterval(interv);
+      }
+    }, 200)
   }
 }
