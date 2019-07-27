@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { from, interval, fromEvent } from 'rxjs';
-import { map, delay, filter } from 'rxjs/operators';
+import { map, delay, filter, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-operators',
@@ -35,6 +35,19 @@ export class OperatorsComponent implements OnInit {
       .pipe(
         filter(i => i % 2 == 0),
         map(i => "Value: " + i),
+        delay(1000)
+      ).subscribe(i => console.log(i));
+  }
+
+  tapClick() {
+    interval(1000)
+      .pipe(
+        tap(i=> console.log('')),
+        tap(i=> console.warn('Before filtering: ', i)),
+        filter(i => i % 2 == 0),
+        tap(i=> console.warn('After filtering: ', i)),
+        map(i => "Value: " + i),
+        tap(i=> console.warn('After map: ', i)),
         delay(1000)
       ).subscribe(i => console.log(i));
   }
