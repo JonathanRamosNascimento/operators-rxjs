@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { from, interval, fromEvent, Observable, Subscription } from 'rxjs';
+import { from, interval, fromEvent, Observable, Subscription, Subject } from 'rxjs';
 import { map, delay, filter, tap, take, first, last, debounceTime } from 'rxjs/operators';
 import { MatRipple } from '@angular/material';
 
@@ -11,6 +11,7 @@ import { MatRipple } from '@angular/material';
 export class OperatorsComponent implements OnInit {
 
   @ViewChild(MatRipple) ripple: MatRipple;
+  private searchInput: string = '';
 
   constructor() { }
 
@@ -65,21 +66,21 @@ export class OperatorsComponent implements OnInit {
     });
 
     const s: Subscription = observable
-    .pipe(
-      tap(i=>console.log(i)),
-      take(10)
-      // first()
-      // last()
+      .pipe(
+        tap(i => console.log(i)),
+        take(10)
+        // first()
+        // last()
       )
       .subscribe(
-        v=> console.log('Output: ',v),
+        v => console.log('Output: ', v),
         (error) => console.error(error),
         () => console.log('Complete!')
-        );
+      );
 
     const interv = setInterval(() => {
       console.log('Checking...');
-      if(s.closed) {
+      if (s.closed) {
         console.warn('Subscription CLOSED');
         clearInterval(interv);
       }
@@ -96,14 +97,25 @@ export class OperatorsComponent implements OnInit {
 
   debounceTimeClick() {
     fromEvent(document, 'click')
-    .pipe(
-      tap((e)=> console.log('Click')),
-      debounceTime(1000)
-    )
-    .subscribe(
-      (e: MouseEvent) => {
-        console.log('Click with debounceTime: ',e);
-        this.launchRipple();
-      })
+      .pipe(
+        tap((e) => console.log('Click')),
+        debounceTime(1000)
+      )
+      .subscribe(
+        (e: MouseEvent) => {
+          console.log('Click with debounceTime: ', e);
+          this.launchRipple();
+        })
+  }
+
+  searchEntry$: Subject<string> = new Subject<string>();
+  searchBy_UsingDebounce($event) {
+    this.searchEntry$.next(this.searchInput);
+  }
+
+  debounceTimeSearch() {
+    this.searchEntry$
+    .pipe(debounceTime(500))
+      .subscribe((s) => console.log(s))
   }
 }
