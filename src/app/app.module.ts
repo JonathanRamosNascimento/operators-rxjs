@@ -11,6 +11,7 @@ import { AsyncComponent } from './async/async.component';
 import { ErrorHandlingComponent } from './error-handling/error-handling.component';
 import { DragAndDropComponent } from './drag-and-drop/drag-and-drop.component';
 import { UnsubscribeComponent } from './unsubscribe/unsubscribe.component';
+import { SwitchMergeComponent } from './switch-merge/switch-merge.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { UnsubscribeComponent } from './unsubscribe/unsubscribe.component';
     AsyncComponent,
     ErrorHandlingComponent,
     DragAndDropComponent,
-    UnsubscribeComponent
+    UnsubscribeComponent,
+    SwitchMergeComponent
   ],
   imports: [
     BrowserModule,
