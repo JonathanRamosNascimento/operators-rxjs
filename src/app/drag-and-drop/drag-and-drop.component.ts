@@ -9,7 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class DragAndDropComponent implements OnInit {
 
-  @ViewChild('myrect') myrect: ElementRef;
+  @ViewChild('myrect', { static: true }) myrect: ElementRef;
 
   top: number = 40;
   left: number = 40;

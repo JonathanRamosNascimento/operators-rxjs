@@ -10,7 +10,7 @@ import { MatRipple } from '@angular/material';
 })
 export class OperatorsComponent implements OnInit {
 
-  @ViewChild(MatRipple) ripple: MatRipple;
+  @ViewChild(MatRipple , { static: true }) ripple: MatRipple;
   private searchInput: string = '';
 
   constructor() { }
